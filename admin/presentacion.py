@@ -52,29 +52,37 @@ class AuthorIdCLI(cmd.Cmd):
         self.do_list(args)
 
     def do_list(self,args):
-        'Prints the list'
+        'Prints the list, with random print random order'
+        args=args.strip().split()
         if len(args)==0:
-            students=self.random
+            students=range(len(self.students))
         else:
-            if args=='original':
-                students=range(len(students))
-            else:
+            if args[0]=='random':
                 students=self.random
+            else:
+                students=range(len(students))
  
-        for student in students:
-            print("{0} {1}".format(self.presented[student], self.students[student]))
-
+        for i,student in enumerate(students):
+            print("{0:2d} {1} {2}".format(i,self.presented[student], self.students[student]))
+        
     def do_random(self,args):
-        'Revuelve la lista de estudiantes'
+        "Randomizes the list"
         random.shuffle(self.random)
+
 
     def do_check(self,args):
         'Checa al siguiente estudiante que no ha presentado'
+        found=False
         for i,student in enumerate(self.random):
             if not self.presented[self.random[i]]:
                 self.cur=i
+                found=True
                 break
-        print(self.students[self.random[self.cur]]) 
+        if found:
+            print(self.students[self.random[self.cur]]) 
+        else:
+            print("Todos han presentado") 
+
 
     def do_next(self,args):
         'Presenta el siguiente estudiante que no ha presentado'
@@ -83,14 +91,22 @@ class AuthorIdCLI(cmd.Cmd):
         self.cur+=1
         while self.cur<len(self.students) and self.presented[self.random[self.cur]]:
                 self.cur+=1
-        print(self.students[self.random[self.cur]]) 
+        if self.cur>=len(self.students):
+            print('No más estudiantes')
+            self.cur=len(students)-1
+        else:
+            print(self.students[self.random[self.cur]])
 
     def do_skip(self,args):
         'Brinca a este estudiante que no ha presentado'
         self.cur+=1
         while self.cur<len(self.students) and self.presented[self.random[self.cur]]:
                 self.cur+=1
-        print(self.students[self.random[self.cur]]) 
+        if self.cur>=len(self.students):
+            print('No más estudiantes')
+            self.cur=len(students)-1
+        else:
+            print(self.students[self.random[self.cur]]) 
 
     def do_current(self,args):
         'Presenta el estudiante actual'
@@ -109,6 +125,13 @@ class AuthorIdCLI(cmd.Cmd):
                 self.students[student]),file=output)
         output.close()
 
+    def do_set(self,args):
+        'Cambia el estado de uno de los estudiantes'
+        if len(args)==0:
+            print("Error: no filename provided")
+
+        args=args.strip().split()
+        self.presented[int(args[0])]=not self.presented[int(args[0])]
 
 
     def do_EOF(self, arg):                                                     
