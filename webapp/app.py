@@ -77,6 +77,18 @@ def set(idd=None, status=None):
     return redirect(url_for('.list'))
 
 
+# Start presentations
+@app.route('/save')
+def save(idd=None, status=None):
+    global list_students, current
+    with open("status.txt", 'w') as f:
+        for num, name, status in list_students:
+            print(name, ",", status, file=f)
+    return redirect(url_for('.list'))
+
+
+
+
 # Función principal (interfaz con línea de comandos)
 if __name__ == '__main__':
     p = argparse.ArgumentParser("lfya_webapp")
@@ -99,7 +111,7 @@ if __name__ == '__main__':
     with open(opts.LISTA, 'r') as f:
         list_students = f.readlines()
 
-    list_students = [(i, s, 0) for i,s in enumerate(list_students)]
+    list_students = [(i, s.strip(), 0) for i,s in enumerate(list_students)]
 
     app.run(debug=opts.debug,
             host=opts.host,
