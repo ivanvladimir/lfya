@@ -1,0 +1,40 @@
+{% extends "default.html" %}
+{% block content %}
+
+<center>
+<h2 class="title is-2">{{student[1]}}</h2>
+
+<div class="columns is-mobile is-centered">
+  <div class="column is-half">
+	<a href="{{url_for('.next',idd=student[0],status=1)}}" class="button is-success is-large">Siguiente</a>
+	<a href="{{url_for('.next',idd=student[0],status=2)}}" class="button is-danger is-large">No está presente</a>
+  </div>
+</div>
+</center>
+
+
+{% if missing %}
+<p>Faltantes</p>
+<table class="table">
+  <thead>
+      <tr>
+	        <th><abbr title="No.">No.</abbr></th>
+	        <th><abbr title="Nombre">Nombre</abbr></th>
+	        <th><abbr title="Acción">Ácción</abbr></th>
+	  </tr>
+  </thead>
+  <tboby>
+{% for num,student_name,status in missing %}
+  <tr><th>{{num+1}}</th><td>{{student_name}}</td>
+  <td ><a href="{{url_for('.next',idd=num,status=1)}}"><i class="fas fa-check-square has-text-success"></i></a></td>
+  </tr>
+{% endfor %}
+  </tboby>
+</table>
+{% endif %}
+
+
+
+
+
+{% endblock %}

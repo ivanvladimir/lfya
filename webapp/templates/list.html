@@ -1,0 +1,44 @@
+
+{% extends "default.html" %}
+{% block content %}
+
+<p>
+No ha salido <i class="far fa-circle has-text-info"></i>, ya presentó <i class="fas fa-check has-text-success"></i>, no estaba<i class="fas fa-times has-text-danger"></i>
+ </p>
+
+
+<table class="table">
+  <thead>
+      <tr>
+	        <th><abbr title="No.">No.</abbr></th>
+	        <th><abbr title="Nombre">Nombre</abbr></th>
+	        <th><abbr title="Estado">Estado</abbr></th>
+	        <th><abbr title="Acciones">Acciones</abbr></th>
+	  </tr>
+  </thead>
+  <tboby>
+{% for idd,student_name,status in list %}
+  <tr><th>{{idd+1}}</th><td>{{student_name}}</td>
+
+{% if status == 0 %}
+  <td><i class="far fa-circle has-text-info"></i></td>
+{% elif status == 1 %}
+  <td ><i class="fas fa-check has-text-success"></i></td>
+{% elif status == 2 %}
+  <td ><i class="fas fa-times has-text-danger"></i></td>
+{% endif %}
+  <td>
+  <a href="{{url_for('set',idd=idd,status=0)}}"><i class="fas fa-pause-circle has-text-info"></i></a>
+  <a href="{{url_for('set',idd=idd,status=1)}}"><i class="fas fa-play-circle has-text-success"></i></a>
+  <a href="{{url_for('set',idd=idd,status=2)}}"><i class="fas fa-stop-circle has-text-danger"></i></a>
+  </td>
+  </tr>
+{% endfor %}
+
+
+  </tboby>
+</table>
+
+
+
+{% endblock %}

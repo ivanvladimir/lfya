@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LFyA</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='bulma.css')}}">
+    <script defer src="{{url_for('static',filename='all.js')}}"></script>
+  </head>
+  <body>
+
+
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="http://turing.iimas.unam.mx/~ivanvladimir/page/curso_lfya">
+		<strong>LYFA</strong>
+    </a>
+
+    <div class="navbar-burger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <div id="mainMenu" class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item" href="{{url_for('.list')}}">
+        Lista
+     </a>
+      <a class="navbar-item" href="{{url_for('.presentations')}}">
+        Presentaciones
+     </a>
+      <a class="navbar-item" href="{{url_for('.about')}}">
+        Acerca
+     </a>
+
+    </div>
+  </div>
+</nav>
+
+
+<section class="hero is-primary">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        lfya
+      </h1>
+      <h2 class="subtitle">
+        Lenguajes Formales y Autómatas
+      </h2>
+    </div>
+  </div>
+</section>
+
+<br/>
+<br/>
+
+
+<section class="section">
+<div class="container">
+{% block content %}
+{% endblock %}
+</div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-right">
+      <p>
+			<p>Copyright Ivan Meza, 2017</p>
+      </p>
+    </div>
+  </div>
+</footer>
+
+
+
+  </body>
+</html>
