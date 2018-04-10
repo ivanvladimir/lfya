@@ -1,0 +1,26 @@
+
+{% extends "default.html" %}
+{% block content %}
+
+
+
+<table>
+<tr>
+{% for list in groups %}
+<td>
+<table class="table">
+  <thead>
+      <tr>
+	        <th><abbr title="Nombre">Equipo {{loop.index}}</abbr></th>
+	  </tr>
+  </thead>
+  <tboby>
+{% for idd,student_name,status in list %}
+  <tr><td>{{student_name}}</td></tr>
+{% endfor %}
+  </tboby>
+</table>
+{% endfor %}
+</td>
+</table>
+{% endblock %}

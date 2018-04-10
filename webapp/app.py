@@ -35,6 +35,23 @@ def list():
 def presentations():
     return render_template('presentations.html')
 
+# Start presentations
+@app.route('/groups')
+@app.route('/groups/<int:n>')
+def groups(n=4):
+    global list_students
+    list_students_ = [(s[0], s[1], 0) for s in list_students]
+    random.shuffle(list_students_)
+    groups=[[] for i in range(n)]
+    for ii,element in enumerate(list_students_):
+        try:
+            groups[ii%n].append(element)
+        except IndexError:
+            groups[ii%n]=[element]
+    return render_template('groups.html', groups=groups)
+
+
+
 
 def draw():
     not_draw = [s for s in list_students if s[2] == 0]
