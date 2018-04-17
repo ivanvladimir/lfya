@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 list_students = []
 current = None
-
+assignations = None
 
 # Página principa.
 @app.route('/')
@@ -130,8 +130,6 @@ def save(idd=None, status=None):
         for num, name, status in list_students:
             print(name, ",", status, file=f)
     return redirect(url_for('.list'))
-
-
 
 
 # Función principal (interfaz con línea de comandos)
