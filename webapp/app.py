@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 import argparse
 import random
+
 
 # Carga aplicación Flask
 app = Flask(__name__)
@@ -28,6 +29,33 @@ def about():
 @app.route('/list')
 def list():
     return render_template('list.html', list=list_students)
+
+# Assign
+@app.route('/asign')
+def asign():
+    asignations=[]
+    return render_template('asign.html',asignations=asignations)
+
+@app.route('/asign_list')
+def asign_list():
+    assignations=None
+
+    if request.args:
+        names=[str(x) for x in request.args.getlist('n') if len(x) > 0]
+        totals=[int(x) for x in request.args.getlist('t') if len(x) > 0]
+        assignations=[]
+        global list_students
+        list_students_ = [(s[0], s[1], 0) for s in list_students]
+        TOTAL=0
+        for name,total in zip(names,totals):
+            assignations.append([])
+            for ii,lement in enumerate(list_students_):
+                assignations[-1].append(random.choice(range(total))+TOTAL)
+            TOTAL+=total
+        print(assignations,names,totals)
+    return render_template('asign.html',list=list_students_,assignations=assignations,names=names,totals=totals)
+
+
 
 
 # Start presentations

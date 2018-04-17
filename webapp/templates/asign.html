@@ -1,0 +1,73 @@
+{% extends "default.html" %}
+{% from "_formhelpers.html" import render_field %}
+
+{% block content %}
+
+
+{% if assignations %}
+<table class="table  is-striped is-fullwidth">
+  <thead>
+      <tr>
+	        <th><abbr title="No.">No.</abbr></th>
+	        <th><abbr title="Nombre">Nombre</abbr></th>
+			{% for name in names %}
+	        <th><abbr title="{{name}}">{{name}}</abbr></th>
+			{% endfor %}
+	  </tr>
+  </thead>
+  <tboby>
+{% for idd,student_name,status in list %}
+  <tr>
+  <td>{{idd+1}}</td>
+  <td>{{student_name}}</td>
+  	{% for name in names %}
+		<td>{{assignations[loop.index-1][idd]+1}}</td>
+	{% endfor %}
+  </tr>
+{% endfor %}
+   </tbody>
+</table>
+<hr/>
+{% endif %}
+
+
+<form method="GET" action="{{url_for('.asign_list')}}">
+{% for col in range(5) %}
+<div class="columns">
+<div class="column is-three-quarters">
+<div class="field">
+	<label class="label">Actividad {{col+1}}</label>
+    <div class="control">
+	{% if assignations and names[col] %}
+	<input class="input" name="n" value="{{names[col]}}" type="text" placeholder="Nombre actividad 1"></input>
+	{% else %}
+	<input class="input" name="n" type="text" placeholder="Nombre actividad 1"></input>
+	{% endif %}
+</div>
+</div>
+</div>
+
+<div class="column">
+<div class="field">
+	<label class="label">Número actividades {{col+1}}</label>
+    <div class="control">
+	{% if assignations and totals[col] %}
+	<input class="input" name="t" value="{{totals[col]}}" type="text" placeholder="Nombre actividad 1"></input>
+	{% else %}
+	<input class="input" name="t" type="text" placeholder="Nombre actividad 1"></input>
+	{% endif %}
+</div>
+</div>
+</div>
+</div>
+{%endfor %}
+
+<div class="field is-grouped">
+  <div class="control">
+    <button class="button is-link">Submit</button>
+  </div>
+</div>
+<form>
+
+
+{% endblock %}
