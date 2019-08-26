@@ -60,7 +60,11 @@ def save_asignation():
     global assignations
     csv=""
     if request.args:
+        vals=['id']
         names=[str(x) for x in request.args.getlist('n') if len(x) > 0]
+        for name in names:
+            vals.append(name)
+        csv+="{}\n".format(",".join(vals))
         for idd,student_name,status in list_students:
             vals=["{}".format(idd)]
             for iname,name in enumerate(names):
