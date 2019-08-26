@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, Response
 import argparse
 import random
 
@@ -38,8 +38,8 @@ def asign():
 
 @app.route('/asign_list')
 def asign_list():
-    assignations=None
 
+    global assignations
     if request.args:
         names=[str(x) for x in request.args.getlist('n') if len(x) > 0]
         totals=[int(x) for x in request.args.getlist('t') if len(x) > 0]
@@ -52,10 +52,22 @@ def asign_list():
             for ii,lement in enumerate(list_students_):
                 assignations[-1].append(random.choice(range(total))+TOTAL)
             TOTAL+=total
-        print(assignations,names,totals)
     return render_template('asign.html',list=list_students_,assignations=assignations,names=names,totals=totals)
 
 
+@app.route('/save_asignation')
+def save_asignation():
+    global assignations
+    csv=""
+    if request.args:
+        names=[str(x) for x in request.args.getlist('n') if len(x) > 0]
+        for idd,student_name,status in list_students:
+            vals=["{}".format(idd)]
+            for iname,name in enumerate(names):
+                vals.append("{}".format(assignations[iname][idd]))
+            csv+="{}\n".format(",".join(vals))
+
+        return Response(csv,mimetype="text/csv",headers={"Content-disposition":"attachment; filename=asignacion.csv"})
 
 
 # Start presentations
