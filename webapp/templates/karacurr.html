@@ -1,0 +1,16 @@
+
+{% extends "default.html" %}
+{% block content %}
+
+<center>
+<h2 class="title is-2">{{student[1]}},{{student[0]}}</h2>
+<h2 class="title is-2">{{pre[0]}},{{pre[1]}}</h2>
+<div class="columns is-mobile is-centered">
+  <div class="column is-half">
+	<a href="{{url_for('.karanext',idd=student[0],pre=pre[0],status=1)}}" class="button is-success is-large">Siguiente</a>
+</div>
+</center>
+
+
+
+{% endblock %}

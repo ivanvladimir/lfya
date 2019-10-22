@@ -4,7 +4,8 @@
 from flask import Flask, render_template, redirect, url_for, request, Response
 import argparse
 import random
-
+import re
+import os
 
 # Carga aplicación Flask
 app = Flask(__name__)
@@ -79,7 +80,6 @@ def save_asignation():
 def presentations():
     return render_template('presentations.html')
 
-# Start presentations
 @app.route('/groups')
 @app.route('/groups/<int:n>')
 def groups(n=4):
@@ -109,6 +109,67 @@ def start():
     global list_students, current
     list_students = [(s[0], s[1], 0) for s in list_students]
     return redirect(url_for('.next'))
+
+# Start presentations
+@app.route('/karaoke')
+def karaoke():
+    return render_template('karaoke.html')
+
+
+re_file=re.compile(r".* (\d+)....$")
+
+# Start presentations
+@app.route('/karastart')
+def karastart():
+    global assignations, pres
+    global list_students
+
+    list_students = [(s[0], s[1], 0) for s in list_students]
+    csv=""
+    if request.args:
+        assignations=dict()
+        fst=True
+        for line in open(request.args.get('file')):
+            if fst:
+                fst=False
+                continue
+            idd,*prom=[int(i) for i in  line.strip().split(",")]
+            for p in prom:
+                try:
+                    assignations[p].append(idd)
+                except KeyError:
+                    assignations[p]=[idd]
+        pres=[]
+        for f in os.listdir(request.args.get('dir')):
+            m=re_file.match(f)
+            if m:
+                pres.append((f,int(m.group(1))-1))
+    return redirect(url_for('.karanext'))
+
+# Start presentations
+@app.route('/karanext')
+@app.route('/karanext/<int:idd>/<pre>/<int:status>')
+def karanext(idd=None,pre=None,status=None):
+    global assignations, pres
+    global list_students
+
+    if idd and idd!=1000:
+        s = list_students[idd]
+        list_students[idd] = (s[0], s[1], status)
+        for i,l in [a for a in assignations.items()]:
+            if idd in assignations[i]:
+                assignations[i].remove(idd)
+  
+    if pre:
+        pres = [p for p in pres if not p[0] == pre]
+    pre=random.choice(pres)
+    if len(assignations[pre[1]])==0:
+       ass=(1000,"Nadie",0) 
+    else:
+        ass=random.choice(assignations[pre[1]])
+        ass=list_students[ass]
+    return render_template('karacurr.html', pre=pre, student=ass)
+
 
 
 # Start presentations
