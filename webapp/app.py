@@ -116,7 +116,7 @@ def karaoke():
     return render_template('karaoke.html')
 
 
-re_file=re.compile(r".* (\d+)....$")
+re_file=re.compile(r".*_(\d+)....$")
 
 # Start presentations
 @app.route('/karastart')
@@ -169,6 +169,58 @@ def karanext(idd=None,pre=None,status=None):
         ass=random.choice(assignations[pre[1]])
         ass=list_students[ass]
     return render_template('karacurr.html', pre=pre, student=ass)
+
+
+# Start presentations
+@app.route('/karaall')
+def karaall():
+    global assignations, pres
+    global list_students
+    pre=None
+
+    list_students = [(s[0], s[1], 0) for s in list_students]
+    csv=""
+    if request.args:
+        assignations=dict()
+        fst=True
+        for line in open(request.args.get('file')):
+            if fst:
+                fst=False
+                continue
+            idd,*prom=[int(i) for i in  line.strip().split(",")]
+            for p in prom:
+                try:
+                    assignations[p].append(idd)
+                except KeyError:
+                    assignations[p]=[idd]
+        pres=[]
+        for f in os.listdir(request.args.get('dir')):
+            m=re_file.match(f)
+            if m:
+                pres.append((f,int(m.group(1))-1))
+
+    if idd and idd!=1000:
+        s = list_students[idd]
+        list_students[idd] = (s[0], s[1], 1)
+        for i,l in [a for a in assignations.items()]:
+            if idd in assignations[i]:
+                assignations[i].remove(idd)
+ 
+    list_kara=[]
+    pre=None
+    for i in list_students:
+        if pre:
+            pres = [p for p in pres if not p[0] == pre]
+        pre=random.choice(pres)
+        if len(assignations[pre[1]])==0:
+           ass=(1000,"Nadie",0) 
+        else:
+            ass=random.choice(assignations[pre[1]])
+            ass=list_students[ass]
+        list_kara.append((pre,ass))
+    print(list_kara)
+    return render_template('karaall.html', list_kara=list_kara)
+
 
 
 

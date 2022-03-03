@@ -1,0 +1,26 @@
+
+{% extends "default.html" %}
+{% block content %}
+
+<table class="table">
+<thead>
+    <tr>
+    <td>No.</td>
+    <td>Nombre</td>
+    <td>Presentación</td>
+    </tr>
+</thead
+<tbody>
+{% for student, pre in list_kara %}
+<tr>
+<td>{{loop.index}}</td>
+<td>{{pre[1]}}</td>
+<td>{{student[0]}}</td>
+</tr>
+{% endfor %}
+<tbody>
+</table>
+
+
+
+{% endblock %}
