@@ -194,7 +194,7 @@ def karaall():
                 except KeyError:
                     assignations[p]=[idd]
         pres=[]
-        for f in os.listdir(request.args.get('dir')):
+        for f in open(request.args.get('dir')):
             m=re_file.match(f)
             if m:
                 pres.append((f,int(m.group(1))-1))
